@@ -2,9 +2,9 @@
   "name": "ilovepdfly-backend",
   "version": "1.0.0",
   "main": "src/server.js",
-  "scripts": {
-    "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+ "scripts": {
+  "dev": "node src/server.js",
+  "start": "node src/server.js"
   },
   "dependencies": {
     "@simplewebauthn/server": "^13.1.2",
