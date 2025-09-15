@@ -6,10 +6,12 @@ const admin = require("firebase-admin");
 
 dotenv.config();
 
-// ✅ initialize Firebase
+// ✅ Initialize Firebase
 if (!admin.apps.length) {
   admin.initializeApp({
-    credential: admin.credential.cert(require(process.env.GOOGLE_APPLICATION_CREDENTIALS))
+    credential: admin.credential.cert(
+      JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS)
+    ),
   });
 }
 
@@ -25,10 +27,10 @@ app.get("/", (req, res) => {
   res.send("iLovePDFly Backend running ✅");
 });
 
-// import your WebAuthn handlers here
+// Import your WebAuthn handlers
 const webauthn = require("./webauthn");
 
-// example usage
+// WebAuthn routes
 app.post("/webauthn/register/options", webauthn.registerOptionsHandler);
 app.post("/webauthn/register/complete", webauthn.registerCompleteHandler);
 app.post("/webauthn/login/options", webauthn.loginOptionsHandler);
