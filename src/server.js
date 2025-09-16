@@ -6,12 +6,15 @@ const admin = require("firebase-admin");
 
 dotenv.config();
 
-// ✅ Initialize Firebase with env variable
+// ✅ Initialize Firebase from JSON string env
 if (!admin.apps.length) {
+  const serviceAccount = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
+
+  // Fix private key (Render may escape it)
+  serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, "\n");
+
   admin.initializeApp({
-    credential: admin.credential.cert(
-      JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON)
-    ),
+    credential: admin.credential.cert(serviceAccount),
   });
 }
 
@@ -22,14 +25,15 @@ app.use(express.json());
 app.use(cors());
 app.use(helmet());
 
-// --- base route ---
+// --- routes ---
 app.get("/", (req, res) => {
   res.send("iLovePDFly Backend running ✅");
 });
 
-// --- WebAuthn handlers ---
+// Import your WebAuthn handlers
 const webauthn = require("./webauthn");
 
+// WebAuthn routes
 app.post("/webauthn/register/options", webauthn.registerOptionsHandler);
 app.post("/webauthn/register/complete", webauthn.registerCompleteHandler);
 app.post("/webauthn/login/options", webauthn.loginOptionsHandler);
